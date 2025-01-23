@@ -4,15 +4,17 @@ import jakarta.persistence.* // Import JPA pour Jakarta
 import lombok.NoArgsConstructor
 import java.math.BigDecimal
 import java.time.LocalDateTime
+import java.util.*
 
 @Entity
 @NoArgsConstructor
 
 
 data class Hopital(
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long? = null,
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    val id: UUID? = null, // Clé primaire unique
 
     @Column(name = "official_name", nullable = false)
     val officialName: String,
@@ -34,6 +36,7 @@ data class Hopital(
 
     @Column(name = "last_update", nullable = false)
     val lastUpdate: LocalDateTime
+
 ) {
 
 }

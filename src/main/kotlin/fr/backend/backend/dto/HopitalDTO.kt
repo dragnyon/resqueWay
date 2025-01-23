@@ -2,9 +2,10 @@ package fr.backend.backend.dto
 
 import java.math.BigDecimal
 import java.time.LocalDateTime
+import java.util.UUID
 
-data class HopitalDTO(
-    val id: Long? = null,
+data class HopitalDto(
+    val id: UUID? = null,
     val officialName: String,
     val fullAddress: String,
     val postalCode: String,
@@ -13,3 +14,4 @@ data class HopitalDTO(
     val occupancyRate: BigDecimal,
     val lastUpdate: LocalDateTime
 )
+

@@ -35,8 +35,8 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
-    // SQLite Driver
-    implementation("com.h2database:h2:2.2.220")
+    // Postgres Driver
+    implementation("org.postgresql:postgresql:42.6.0")
 
     // Development tools
     developmentOnly("org.springframework.boot:spring-boot-devtools")
@@ -44,6 +44,9 @@ dependencies {
     // Lombok
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
+
+    //Swagger
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0")
 
     // Testing dependencies
     testImplementation("org.springframework.boot:spring-boot-starter-test")

@@ -1,14 +1,15 @@
 package fr.backend.backend.mapper
 
-import fr.backend.backend.dto.HopitalDTO
+import fr.backend.backend.dto.HopitalDto
 import fr.backend.backend.model.Hopital
 import org.springframework.stereotype.Component
+import java.util.*
 
 @Component
 class HopitalMapper {
 
-    fun toDTO(hopital: Hopital): HopitalDTO {
-        return HopitalDTO(
+    fun toDto(hopital: Hopital): HopitalDto {
+        return HopitalDto(
             id = hopital.id,
             officialName = hopital.officialName,
             fullAddress = hopital.fullAddress,
@@ -20,16 +21,16 @@ class HopitalMapper {
         )
     }
 
-    fun toEntity(dto: HopitalDTO): Hopital {
+    fun toEntity(hopitalDto: HopitalDto): Hopital {
         return Hopital(
-            id = dto.id,
-            officialName = dto.officialName,
-            fullAddress = dto.fullAddress,
-            postalCode = dto.postalCode,
-            latitude = dto.latitude,
-            longitude = dto.longitude,
-            occupancyRate = dto.occupancyRate,
-            lastUpdate = dto.lastUpdate
+            id = hopitalDto.id ,
+            officialName = hopitalDto.officialName,
+            fullAddress = hopitalDto.fullAddress,
+            postalCode = hopitalDto.postalCode,
+            latitude = hopitalDto.latitude,
+            longitude = hopitalDto.longitude,
+            occupancyRate = hopitalDto.occupancyRate,
+            lastUpdate = hopitalDto.lastUpdate
         )
     }
 }

@@ -1,10 +1,10 @@
 package fr.backend.backend.service
 
-import fr.backend.backend.dto.HopitalDTO
+import fr.backend.backend.dto.HopitalDto
 import fr.backend.backend.mapper.HopitalMapper
-import fr.backend.backend.model.Hopital
 import fr.backend.backend.repository.HopitalRepository
 import org.springframework.stereotype.Service
+import java.util.UUID
 
 @Service
 class HopitalService(
@@ -12,20 +12,36 @@ class HopitalService(
     private val hopitalMapper: HopitalMapper
 ) {
 
-    fun getAllHopitaux(): List<HopitalDTO> {
-        return hopitalRepository.findAll().map { hopitalMapper.toDTO(it) }
+    fun getAllHopitaux(): List<HopitalDto> {
+        val hopitaux = hopitalRepository.findAll()
+        return hopitaux.map { hopitalMapper.toDto(it) }
     }
 
-    fun createHopital(dto: HopitalDTO): HopitalDTO {
-        val hopital = hopitalMapper.toEntity(dto)
-        val savedHopital = hopitalRepository.save(hopital)
-        return hopitalMapper.toDTO(savedHopital)
-    }
-
-    fun getHopitalById(id: Long): HopitalDTO {
+    fun getHopitalById(id: UUID): HopitalDto {
         val hopital = hopitalRepository.findById(id).orElseThrow {
             IllegalArgumentException("Hopital avec ID $id introuvable")
         }
-        return hopitalMapper.toDTO(hopital)
+        return hopitalMapper.toDto(hopital)
+    }
+
+    fun createHopital(hopitalDto: HopitalDto): HopitalDto {
+        val hopital = hopitalMapper.toEntity(hopitalDto.copy(id = null))
+        val savedHopital = hopitalRepository.save(hopital)
+        return hopitalMapper.toDto(savedHopital)
+    }
+
+    fun updateHopital(id: UUID, hopitalDto: HopitalDto): HopitalDto {
+        val existingHopital = hopitalRepository.findById(id).orElseThrow {
+            IllegalArgumentException("Hopital avec ID $id introuvable")
+        }
+        val updatedHopital = hopitalMapper.toEntity(hopitalDto.copy(id = existingHopital.id))
+        return hopitalMapper.toDto(hopitalRepository.save(updatedHopital))
+    }
+
+    fun deleteHopital(id: UUID) {
+        if (!hopitalRepository.existsById(id)) {
+            throw IllegalArgumentException("Hopital avec ID $id introuvable")
+        }
+        hopitalRepository.deleteById(id)
     }
 }
