@@ -12,10 +12,10 @@ class EntrepriseMapper {
     fun toEntity(dto: EntrepriseDTO, abo: Abonnement?): Entreprise {
 
         return Entreprise(
-            idEntreprise = dto.id,
+            id = dto.id,
             adresse = dto.adresse,
             adresseMail = dto.mail,
-            abonnement = abo,
+            abonnement = abo?.let { abo },
             password = dto.password
         )
     }
@@ -24,7 +24,7 @@ class EntrepriseMapper {
 
     fun toDTO(entity: Entreprise): EntrepriseDTO {
         return EntrepriseDTO(
-            id = entity.idEntreprise,
+            id = entity.id,
             abonnement = entity.abonnement?.id,
             adresse = entity.adresse,
             mail = entity.adresseMail,

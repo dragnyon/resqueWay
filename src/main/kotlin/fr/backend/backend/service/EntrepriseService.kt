@@ -46,7 +46,7 @@ class EntrepriseService(
                 .orElseThrow { IllegalArgumentException("Abonnement introuvable") }
         }
         val entreprise = entrepriseMapper.toEntity(entrepriseDTO, abonnement)
-        entreprise.idEntreprise = id
+        entreprise.id = id
         val entrepriseSaved = entrepriseRepository.save(entreprise)
         return entrepriseMapper.toDTO(entrepriseSaved)
     }

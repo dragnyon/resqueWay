@@ -3,6 +3,7 @@ package fr.backend.backend.model
 import fr.backend.backend.dto.AbonnementDTO
 import jakarta.persistence.* // Import JPA pour Jakarta
 import lombok.NoArgsConstructor
+import org.hibernate.annotations.UuidGenerator
 import java.util.*
 
 @Entity
@@ -10,8 +11,9 @@ import java.util.*
 class Entreprise(
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    var idEntreprise: UUID, // Clé primaire unique
+    @GeneratedValue
+    @UuidGenerator
+    var id: UUID? = null,
 
     @OneToOne
     @JoinColumn(name = "id_abonnement") // Clé étrangère vers Abonnement

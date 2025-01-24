@@ -14,20 +14,20 @@ class UtilisateurMapper {
     fun toEntity(dto: UtilisateurDto, entreprise: Entreprise?): Utilisateur {
 
         return Utilisateur(
-            idUser = UUID.randomUUID(),
+            id = dto.id,
             email = dto.email,
             password = dto.password,
-            entreprise = entreprise,
+            entreprise = entreprise?.let { entreprise },
 
         )
     }
 
     fun toDto(utilisateur: Utilisateur): UtilisateurDto {
         return UtilisateurDto(
-
+            id = utilisateur.id,
             email = utilisateur.email,
             password = utilisateur.password,
-            entreprise = utilisateur.entreprise?.idEntreprise
+            entreprise = utilisateur.entreprise?.id
 
         )
     }

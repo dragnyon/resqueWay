@@ -6,7 +6,7 @@ import java.util.*
 
 
 data class HopitalDto(
-    val id: UUID,
+    val id: UUID? = null,
     val officialName: String,
     val fullAddress: String,
     val postalCode: String,

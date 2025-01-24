@@ -6,8 +6,8 @@ import java.time.LocalDateTime
 import java.util.*
 
 data class EntrepriseDTO (
-    val id: UUID,
-    val abonnement: UUID?,
+    val id: UUID? = null,
+    val abonnement: UUID? = null,
     val adresse: String,
     val mail: String,
     val password: String

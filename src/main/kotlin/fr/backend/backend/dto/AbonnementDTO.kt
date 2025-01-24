@@ -5,7 +5,7 @@ import java.util.*
 
 data class AbonnementDTO (
 
-    val id: UUID,
+    val id: UUID? = null,
     val dateDebut: LocalDateTime,
     val dateFin: LocalDateTime,
     val periodicite: String,
