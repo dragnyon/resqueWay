@@ -2,10 +2,11 @@ package fr.backend.backend.dto
 
 import java.math.BigDecimal
 import java.time.LocalDateTime
-import java.util.UUID
+import java.util.*
+
 
 data class HopitalDto(
-    val id: UUID? = null,
+    val id: UUID,
     val officialName: String,
     val fullAddress: String,
     val postalCode: String,

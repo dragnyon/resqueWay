@@ -14,7 +14,7 @@ data class Hopital(
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    val id: UUID? = null, // Clé primaire unique
+    val id: UUID = UUID.randomUUID(), // Clé primaire unique
 
     @Column(name = "official_name", nullable = false)
     val officialName: String,

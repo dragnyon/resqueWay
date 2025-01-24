@@ -12,7 +12,7 @@ class Abonnement(
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    val id: UUID? , // Clé primaire unique
+    val id: UUID , // Clé primaire unique
 
     @Column(name = "date_debut", nullable = false)
     val dateDebut: LocalDateTime,
@@ -24,7 +24,7 @@ class Abonnement(
     val periodicite: String,
 
     @Column(name = "nb_utilisateur", nullable = false)
-    val nbUtilisateur: BigDecimal,
+    val nbUtilisateur: Int,
 
     @Column(name = "renouvellement_auto", nullable = false)
     val renouvellementAuto: String,
@@ -33,7 +33,7 @@ class Abonnement(
     val nbJourRestant: Int?,
 
     @Column(nullable = false)
-    val prix: BigDecimal,
+    val prix: Double,
 
     @Column(nullable = false)
     val status: String // "actif" ou "passif"

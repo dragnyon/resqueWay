@@ -1,9 +1,8 @@
 package fr.backend.backend.model
 
+import fr.backend.backend.dto.AbonnementDTO
 import jakarta.persistence.* // Import JPA pour Jakarta
 import lombok.NoArgsConstructor
-import java.math.BigDecimal
-import java.time.LocalDateTime
 import java.util.*
 
 @Entity
@@ -12,11 +11,11 @@ class Entreprise(
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    val idEntreprise: UUID? , // Clé primaire unique
+    var idEntreprise: UUID, // Clé primaire unique
 
     @OneToOne
     @JoinColumn(name = "id_abonnement") // Clé étrangère vers Abonnement
-    val abonnement: Abonnement? = null,
+    val abonnement: Abonnement?,
 
     @Column(nullable = false)
     val adresse: String,
@@ -24,7 +23,7 @@ class Entreprise(
     @Column(name = "adresse_mail", nullable = false, unique = true)
     val adresseMail: String,
 
-    @Column(nullable = false)
+    @Column(name = "password", nullable = false)
     val password: String
 ) {
 }

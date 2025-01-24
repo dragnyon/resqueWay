@@ -25,9 +25,9 @@ class HopitalService(
     }
 
     fun createHopital(hopitalDto: HopitalDto): HopitalDto {
-        val hopital = hopitalMapper.toEntity(hopitalDto.copy(id = null))
-        val savedHopital = hopitalRepository.save(hopital)
-        return hopitalMapper.toDto(savedHopital)
+        val hopital = hopitalMapper.toEntity(hopitalDto)
+        val hopitalSaved = hopitalRepository.save(hopital)
+        return hopitalMapper.toDto(hopitalSaved)
     }
 
     fun updateHopital(id: UUID, hopitalDto: HopitalDto): HopitalDto {

@@ -23,7 +23,7 @@ class HopitalMapper {
 
     fun toEntity(hopitalDto: HopitalDto): Hopital {
         return Hopital(
-            id = hopitalDto.id ,
+            id = hopitalDto.id,
             officialName = hopitalDto.officialName,
             fullAddress = hopitalDto.fullAddress,
             postalCode = hopitalDto.postalCode,

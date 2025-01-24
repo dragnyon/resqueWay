@@ -1,0 +1,51 @@
+package fr.backend.backend.controller
+
+import fr.backend.backend.dto.EntrepriseDTO
+import fr.backend.backend.service.EntrepriseService
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.*
+import java.util.*
+
+
+@RestController
+@RequestMapping("/api/entreprise")
+class EntrepriseController(
+
+    private val entrepriseService: EntrepriseService
+) {
+
+    @GetMapping
+    fun getAllEntreprises(): ResponseEntity<List<EntrepriseDTO>> {
+        val entreprises = entrepriseService.getAllEntreprise()
+        return ResponseEntity.ok(entreprises)
+    }
+
+    @GetMapping("/{id}")
+    fun getEntrepriseById(@PathVariable id: UUID): ResponseEntity<EntrepriseDTO> {
+        val entreprise = entrepriseService.getEntrepriseById(id)
+        return ResponseEntity.ok(entreprise)
+    }
+
+    @PostMapping
+    fun createEntreprise(@RequestBody entrepriseDTO: EntrepriseDTO): ResponseEntity<EntrepriseDTO> {
+        val newEntreprise = entrepriseService.createEntreprise(entrepriseDTO)
+        return ResponseEntity(newEntreprise, HttpStatus.CREATED)
+    }
+
+    @PutMapping("/{id}")
+    fun updateEntreprise(
+        @PathVariable id: UUID,
+        @RequestBody entrepriseDTO: EntrepriseDTO
+    ): ResponseEntity<EntrepriseDTO> {
+        val updatedEntreprise = entrepriseService.updateEntreprise(id, entrepriseDTO)
+        return ResponseEntity.ok(updatedEntreprise)
+    }
+
+    @DeleteMapping("/{id}")
+    fun deleteEntreprise(@PathVariable id: UUID): ResponseEntity<Void> {
+        entrepriseService.deleteEntreprise(id)
+        return ResponseEntity.noContent().build()
+    }
+
+}
