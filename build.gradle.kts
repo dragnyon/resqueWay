@@ -15,6 +15,8 @@ java {
     }
 }
 
+
+
 configurations {
     compileOnly {
         extendsFrom(configurations.annotationProcessor.get())
@@ -23,6 +25,7 @@ configurations {
 
 repositories {
     mavenCentral()
+
 }
 
 dependencies {
@@ -47,6 +50,9 @@ dependencies {
 
     //Swagger
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0")
+
+    // Bean Validation (Hibernate Validator)
+    implementation("org.hibernate.validator:hibernate-validator:8.0.0.Final")
 
     // Testing dependencies
     testImplementation("org.springframework.boot:spring-boot-starter-test")

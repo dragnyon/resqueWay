@@ -1,12 +1,14 @@
 package fr.backend.backend.service
+
 import fr.backend.backend.dto.UtilisateurDto
+import fr.backend.backend.exception.ResourceNotFoundException
 import fr.backend.backend.mapper.UtilisateurMapper
 import fr.backend.backend.repository.EntrepriseRepository
+import fr.backend.backend.repository.UtilisateurRepository
+import fr.backend.backend.request.UtilisateurCreateRequest
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
-import fr.backend.backend.repository.UtilisateurRepository
-
 
 
 @Service
@@ -17,7 +19,7 @@ class UtilisateurService(
 ) {
 
     @Transactional
-    fun createUtilisateur(utilisateurDto: UtilisateurDto): UtilisateurDto {
+    fun createUtilisateur(utilisateurDto: UtilisateurCreateRequest): UtilisateurDto {
         val entreprise = utilisateurDto.entreprise?.let {
             entrepriseRepository.findById(it)
                 .orElseThrow { IllegalArgumentException("Entreprise introuvable") }
@@ -28,8 +30,12 @@ class UtilisateurService(
     }
 
     fun getUtilisateurById(id: UUID): UtilisateurDto {
-        val utilisateur = utilisateurRepository.findById(id)
-            .orElseThrow { IllegalArgumentException("Utilisateur introuvable") }
+        val utilisateur = utilisateurRepository.findById(id).orElseThrow {
+            throw ResourceNotFoundException(
+                "Utilisateur introuvable",
+                resourceId = id
+            )
+        }
         return utilisateurMapper.toDto(utilisateur)
     }
 
