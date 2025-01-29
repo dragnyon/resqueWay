@@ -15,25 +15,25 @@ class EntrepriseController(
     private val entrepriseService: EntrepriseService
 ) {
 
-    @GetMapping
+    @GetMapping("/all")
     fun getAllEntreprises(): ResponseEntity<List<EntrepriseDTO>> {
         val entreprises = entrepriseService.getAllEntreprise()
         return ResponseEntity.ok(entreprises)
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("get/{id}")
     fun getEntrepriseById(@PathVariable id: UUID): ResponseEntity<EntrepriseDTO> {
         val entreprise = entrepriseService.getEntrepriseById(id)
         return ResponseEntity.ok(entreprise)
     }
 
-    @PostMapping
+    @PostMapping("/create")
     fun createEntreprise(@RequestBody entrepriseDTO: EntrepriseDTO): ResponseEntity<EntrepriseDTO> {
         val newEntreprise = entrepriseService.createEntreprise(entrepriseDTO)
         return ResponseEntity(newEntreprise, HttpStatus.CREATED)
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("update/{id}")
     fun updateEntreprise(
         @PathVariable id: UUID,
         @RequestBody entrepriseDTO: EntrepriseDTO
@@ -42,7 +42,7 @@ class EntrepriseController(
         return ResponseEntity.ok(updatedEntreprise)
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("delete/{id}")
     fun deleteEntreprise(@PathVariable id: UUID): ResponseEntity<Void> {
         entrepriseService.deleteEntreprise(id)
         return ResponseEntity.noContent().build()

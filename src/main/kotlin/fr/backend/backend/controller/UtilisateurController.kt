@@ -35,4 +35,13 @@ class UtilisateurController(
     fun deleteUtilisateur(@PathVariable id: UUID) {
         return utilisateurService.deleteUtilisateur(id)
     }
+
+    @PutMapping("update/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    fun updateUtilisateur(
+        @PathVariable id: UUID,
+        @RequestBody utilisateurDto: UtilisateurCreateRequest
+    ): UtilisateurDto {
+        return utilisateurService.updateUtilisateur(id, utilisateurDto)
+    }
 }

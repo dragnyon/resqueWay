@@ -46,5 +46,22 @@ class UtilisateurService(
 
     fun deleteUtilisateur(id: UUID) = utilisateurRepository.deleteById(id)
 
+    fun updateUtilisateur(id: UUID, utilisateurDto: UtilisateurCreateRequest): UtilisateurDto {
+        val entreprise = utilisateurDto.entreprise?.let {
+            entrepriseRepository.findById(it)
+                .orElseThrow { IllegalArgumentException("Entreprise introuvable") }
+        }
+        val utilisateur = utilisateurRepository.findById(id).orElseThrow {
+            throw ResourceNotFoundException(
+                "Utilisateur introuvable",
+                resourceId = id
+            )
+        }
+        utilisateur.email = utilisateurDto.email
+        utilisateur.password = utilisateurDto.password
+        utilisateur.entreprise = entreprise
+        val utilisateurSaved = utilisateurRepository.save(utilisateur)
+        return utilisateurMapper.toDto(utilisateurSaved)
+    }
 
 }

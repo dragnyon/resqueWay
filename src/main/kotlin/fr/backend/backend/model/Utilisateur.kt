@@ -1,17 +1,15 @@
 package fr.backend.backend.model
 
-import jakarta.persistence.* // Import JPA pour Jakarta
+import jakarta.persistence.*
 import lombok.NoArgsConstructor
 import org.hibernate.annotations.UuidGenerator
-import java.math.BigDecimal
-import java.time.LocalDateTime
 import java.util.*
 
 @Entity
 @NoArgsConstructor
 
 
-class Utilisateur (
+class Utilisateur(
 
     @Id
     @GeneratedValue
@@ -19,14 +17,14 @@ class Utilisateur (
     var id: UUID? = null,
 
     @Column(nullable = false, unique = true)
-    val email: String,
+    var email: String,
 
     @Column(nullable = false)
-    val password: String,
+    var password: String,
 
     @ManyToOne
     @JoinColumn(name = "id_entreprise", nullable = true) // Clé étrangère vers Entreprise
-    val entreprise: Entreprise? = null,
+    var entreprise: Entreprise? = null,
 ) {
 
 
