@@ -1,32 +1,29 @@
 package fr.backend.backend.mapper
 
-import fr.backend.backend.dto.AbonnementDTO
-import fr.backend.backend.dto.EntrepriseDTO
 import fr.backend.backend.dto.UtilisateurDto
 import fr.backend.backend.model.Entreprise
 import fr.backend.backend.model.Utilisateur
 import fr.backend.backend.request.UtilisateurCreateRequest
 import org.springframework.stereotype.Component
-import java.util.*
 
 @Component
 class UtilisateurMapper {
 
     fun toEntity(dto: UtilisateurCreateRequest, entreprise: Entreprise?): Utilisateur {
 
-        return Utilisateur(
+        val utilisateur = Utilisateur(
             email = dto.email,
-            password = dto.password,
-            entreprise = entreprise?.let { entreprise },
-
+            entreprise = entreprise
         )
+        utilisateur.password = dto.password // 🔹 Hash automatiquement via setter
+        return utilisateur
     }
 
     fun toDto(utilisateur: Utilisateur): UtilisateurDto {
         return UtilisateurDto(
             id = utilisateur.id,
             email = utilisateur.email,
-            password = utilisateur.password,
+            password = "",
             entreprise = utilisateur.entreprise?.id
 
         )
