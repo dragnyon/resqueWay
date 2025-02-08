@@ -28,15 +28,15 @@ class AuthController(
     @PostMapping("/login")
     fun login(@RequestBody authRequest: AuthRequest): ResponseEntity<AuthResponse> {
         val utilisateur = utilisateurRepository.findByEmail(authRequest.email)
-            ?: return ResponseEntity.badRequest().body(AuthResponse("Email incorrect"))
+            ?: return ResponseEntity.badRequest().body(AuthResponse("Email incorrect", null))
 
         //  Vérifie le mot de passe hashé
         if (!passwordEncoder.matches(authRequest.password, utilisateur.password)) {
-            return ResponseEntity.badRequest().body(AuthResponse("Mot de passe incorrect"))
+            return ResponseEntity.badRequest().body(AuthResponse("Mot de passe incorrect", null))
         }
 
         val token = jwtUtil.generateToken(utilisateur.email) // ✅ Génère le token JWT
 
-        return ResponseEntity.ok(AuthResponse(token))
+        return ResponseEntity.ok(AuthResponse(token, utilisateur.typeUtilisateur))
     }
 }

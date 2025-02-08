@@ -23,6 +23,11 @@ class Utilisateur(
     @Column(nullable = false)
     private var _password: String = "", // Champ privé pour stocker le hashé
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    var typeUtilisateur: TypeUtilisateur, // 🔹 Par défaut, utilisateur classique
+
+
 
     @ManyToOne
     @JoinColumn(name = "id_entreprise", nullable = true) // Clé étrangère vers Entreprise

@@ -29,7 +29,6 @@ class UtilisateurService(
         }
         val utilisateur = utilisateurMapper.toEntity(utilisateurDto, entreprise)
 
-        //utilisateur.password = passwordEncoder.encode(utilisateurDto.password) // Hashage ici
 
         val utilisateurSaved = utilisateurRepository.save(utilisateur)
         return utilisateurMapper.toDto(utilisateurSaved)
@@ -66,6 +65,7 @@ class UtilisateurService(
         utilisateur.email = utilisateurDto.email
         utilisateur.password = utilisateurDto.password
         utilisateur.entreprise = entreprise
+        utilisateur.typeUtilisateur = utilisateurDto.typeUtilisateur
         val utilisateurSaved = utilisateurRepository.save(utilisateur)
         return utilisateurMapper.toDto(utilisateurSaved)
     }

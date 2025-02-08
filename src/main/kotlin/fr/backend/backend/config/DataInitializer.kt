@@ -1,11 +1,11 @@
 package fr.backend.backend.config
 
+import fr.backend.backend.model.TypeUtilisateur
 import fr.backend.backend.model.Utilisateur
 import fr.backend.backend.repository.UtilisateurRepository
 import org.springframework.boot.ApplicationRunner
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 
 @Configuration
 class DataInitializer {
@@ -13,23 +13,32 @@ class DataInitializer {
     @Bean
     fun initDatabase(utilisateurRepository: UtilisateurRepository): ApplicationRunner {
         return ApplicationRunner {
-            val defaultEmail = "default@example.com"
+            val defaultPassword = "password123"
 
-            // Vérifie si l'utilisateur existe déjà
-            if (utilisateurRepository.findByEmail(defaultEmail) == null) {
-                val passwordEncoder = BCryptPasswordEncoder()
-                val hashedPassword = passwordEncoder.encode("password123") // 🔹 Mot de passe par défaut
+            // Liste des emails des utilisateurs de test
+            val testUsers = listOf(
+                "default@example.com",
+                "test1@example.com",
+                "test2@example.com",
+                "test3@example.com",
+                "test4@example.com"
+            )
 
-                val defaultUser = Utilisateur(
+            testUsers.forEach { email ->
+                // Vérifie si l'utilisateur existe déjà
+                if (utilisateurRepository.findByEmail(email) == null) {
 
-                    email = defaultEmail,
-
+                    val utilisateur = Utilisateur(
+                        email = email,
+                        typeUtilisateur = TypeUtilisateur.USER
                     )
-                defaultUser.password = "password123" // 🔹 Mot de passe haché
-                utilisateurRepository.save(defaultUser)
-                println("✅ Utilisateur créé avec succès : $defaultEmail / password123")
-            } else {
-                println("⚠️ Un utilisateur existe déjà, aucun ajout nécessaire.")
+                    utilisateur.password = defaultPassword // ✅ Pas d'encodage ici
+
+                    utilisateurRepository.save(utilisateur)
+                    println("✅ Utilisateur créé avec succès : $email / $defaultPassword")
+                } else {
+                    println("⚠️ L'utilisateur $email existe déjà, aucun ajout nécessaire.")
+                }
             }
         }
     }

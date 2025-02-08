@@ -13,7 +13,10 @@ class UtilisateurMapper {
 
         val utilisateur = Utilisateur(
             email = dto.email,
-            entreprise = entreprise
+            entreprise = entreprise,
+            typeUtilisateur = dto.typeUtilisateur,
+
+
         )
         utilisateur.password = dto.password // 🔹 Hash automatiquement via setter
         return utilisateur
@@ -24,7 +27,8 @@ class UtilisateurMapper {
             id = utilisateur.id,
             email = utilisateur.email,
             password = "",
-            entreprise = utilisateur.entreprise?.id
+            entreprise = utilisateur.entreprise?.id,
+            typeUtilisateur = utilisateur.typeUtilisateur
 
         )
     }
