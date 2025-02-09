@@ -30,11 +30,11 @@ class SecurityConfig(
                     "/api/auth/**",
                     "/swagger-ui/**",  // Autorise Swagger UI
                     "/v3/api-docs/**",  // Autorise la doc OpenAPI
-                    "/api/utilisateurs/**",
+                  //  "/api/utilisateurs/**",
                 ).permitAll()
 
                 it.requestMatchers(
-                  //  "/api/utilisateurs/**",
+                    "/api/utilisateurs/**",
                     "/api/entreprise/**"
                 ).authenticated()
 
