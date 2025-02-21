@@ -7,27 +7,33 @@ import io.jsonwebtoken.SignatureAlgorithm
 import io.jsonwebtoken.security.Keys
 import org.springframework.stereotype.Component
 import java.security.Key
-import java.util.*
+import java.util.Date
 
 @Component
 class JwtUtil {
 
-    private val secretKey: Key = Keys.secretKeyFor(SignatureAlgorithm.HS256) // ✅ Clé sécurisée
+    private val secretKey: Key = Keys.secretKeyFor(SignatureAlgorithm.HS256)
 
+    // Extrait le "subject" (ici l'email) du token
     fun extractUsername(token: String): String {
         return extractClaim(token) { it.subject }
     }
 
-    fun extractEntreprise(token: String): String {
-        return extractClaim(token) { it.get("entreprise", String::class.java) }
+    // Extrait la claim "entreprise" (ID de l'entreprise en string)
+    fun extractEntreprise(token: String): String? {
+        return extractClaim(token) { claims ->
+            claims["entreprise"] as? String
+        }
     }
 
-    fun extractUserType(token: String): String {
-        return extractClaim(token) { it.get("typeUtilisateur", String::class.java) }
+    // Extrait la claim "typeUtilisateur"
+    fun extractUserType(token: String): String? {
+        return extractClaim(token) { claims ->
+            claims["typeUtilisateur"] as? String
+        }
     }
 
-
-
+    // Méthode générique pour extraire un champ du token
     fun <T> extractClaim(token: String, claimsResolver: (Claims) -> T): T {
         val claims = extractAllClaims(token)
         return claimsResolver(claims)
@@ -41,20 +47,24 @@ class JwtUtil {
             .body
     }
 
-    fun generateToken(user: Utilisateur): String { // 🔹 Prend un String
+    // Génère le token avec l'email (subject), l'id de l'entreprise, le type d'utilisateur, etc.
+    fun generateToken(user: Utilisateur): String {
+        val entrepriseId = user.entreprise?.id?.toString() ?: ""
+
         return Jwts.builder()
-            .setSubject(user.email)
-            .claim("entreprise", user.entreprise?.id.toString())
-            .claim("typeUtilisateur", user.typeUtilisateur)
+            .setSubject(user.email) // subject = email
+            .claim("entreprise", entrepriseId)
+            .claim("typeUtilisateur", user.typeUtilisateur.toString())
             .setIssuedAt(Date())
-            .setExpiration(Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
+            .setExpiration(Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // ex : 10h
             .signWith(secretKey, SignatureAlgorithm.HS256)
             .compact()
     }
 
-    fun validateToken(token: String, username: String): Boolean { // 🔹 Prend un String
+    // Méthode de validation (optionnel si tu as un filtre qui valide autrement)
+    fun validateToken(token: String, username: String): Boolean {
         val extractedUsername = extractUsername(token)
-        return extractedUsername == username && !isTokenExpired(token)
+        return (extractedUsername == username && !isTokenExpired(token))
     }
 
     private fun isTokenExpired(token: String): Boolean {

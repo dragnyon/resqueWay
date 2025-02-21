@@ -58,15 +58,20 @@ class UtilisateurController(
 
     @GetMapping("/getbycompany")
     fun getUtilisateursByEntreprise(request: HttpServletRequest): List<UtilisateurDto> {
-        val authHeader = request.getHeader("Authorization")
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            throw RuntimeException("Token manquant ou mal formé")
-        }
-        val token = authHeader.substring(7)
-        val entrepriseIdStr = jwtUtil.extractEntreprise(token) // Méthode que vous aurez ajoutée dans JwtUtil
+        // Récupère le cookie "access_token"
+        val tokenCookie = request.cookies?.firstOrNull { it.name == "access_token" }
+            ?: throw RuntimeException("Token manquant ou mal formé")
+        val token = tokenCookie.value
+
+        // Extraction de l'ID de l'entreprise depuis la claim "entreprise"
+        val entrepriseIdStr = jwtUtil.extractEntreprise(token)
+            ?: throw RuntimeException("Entreprise introuvable dans le token")
         val entrepriseId = UUID.fromString(entrepriseIdStr)
+
+        // Retourne la liste des utilisateurs correspondant à cet ID d'entreprise
         return utilisateurService.findByEntrepriseId(entrepriseId)
     }
+
 
 
 

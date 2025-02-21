@@ -21,19 +21,28 @@ class JwtAuthFilter(
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
-        val authHeader = request.getHeader("Authorization")
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+        // On récupère le cookie "access_token"
+        val tokenCookie = request.cookies?.firstOrNull { it.name == "access_token" }
+        val token = tokenCookie?.value
+
+        // Si le cookie n'existe pas ou est vide, on passe au suivant
+        if (token.isNullOrBlank()) {
             filterChain.doFilter(request, response)
             return
         }
 
-        val token = authHeader.substring(7)
+        // On extrait l'username depuis le token
         val username = jwtUtil.extractUsername(token)
 
+        // Vérifie si l'utilisateur n'est pas déjà authentifié
         if (SecurityContextHolder.getContext().authentication == null) {
             val userDetails = userDetailsService.loadUserByUsername(username)
-            if (jwtUtil.validateToken(token, userDetails.username)) { // ✅ Correction ici
-                val authToken = UsernamePasswordAuthenticationToken(userDetails, null, userDetails.authorities)
+            if (jwtUtil.validateToken(token, userDetails.username)) {
+                val authToken = UsernamePasswordAuthenticationToken(
+                    userDetails,
+                    null,
+                    userDetails.authorities
+                )
                 authToken.details = WebAuthenticationDetailsSource().buildDetails(request)
                 SecurityContextHolder.getContext().authentication = authToken
             }
