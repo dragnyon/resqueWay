@@ -6,6 +6,8 @@ import java.util.*
 
 data class UtilisateurCreateRequest(
     val email: String,
+    val nom: String,
+    val prenom: String,
     val password: String,
     val entreprise: UUID?,
     val typeUtilisateur: TypeUtilisateur

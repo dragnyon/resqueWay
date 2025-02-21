@@ -23,23 +23,47 @@ class DataInitializer {
                 "test3@example.com",
                 "test4@example.com"
             )
+            val testUsersName = listOf(
+                "UserName1",
+                "UserName2",
+                "UserName3",
+                "UserName4",
+                "UserName5"
+            )
 
-            testUsers.forEach { email ->
-                // Vérifie si l'utilisateur existe déjà
+            val testUsersLastName = listOf(
+                "UserLastName1",
+                "UserLastName2",
+                "UserLastName3",
+                "UserLastName4",
+                "UserLastName5"
+            )
+
+            // Crée un utilisateur de test pour chaque email, nom et prénom
+
+
+            testUsers.forEachIndexed { index, email ->
                 if (utilisateurRepository.findByEmail(email) == null) {
-
                     val utilisateur = Utilisateur(
                         email = email,
-                        typeUtilisateur = TypeUtilisateur.USER
+                        nom = testUsersName[index],
+                        prenom = testUsersLastName[index],
+                        typeUtilisateur = TypeUtilisateur.SUPER_ADMIN
                     )
-                    utilisateur.password = defaultPassword // ✅ Pas d'encodage ici
-
+                    utilisateur.password = defaultPassword
                     utilisateurRepository.save(utilisateur)
                     println("✅ Utilisateur créé avec succès : $email / $defaultPassword")
                 } else {
                     println("⚠️ L'utilisateur $email existe déjà, aucun ajout nécessaire.")
                 }
+
             }
+
+
+
+
+
+
         }
     }
 }

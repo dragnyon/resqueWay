@@ -3,15 +3,19 @@ package fr.backend.backend.controller
 import fr.backend.backend.dto.UtilisateurDto
 import fr.backend.backend.request.UtilisateurCreateRequest
 import fr.backend.backend.service.UtilisateurService
+import jakarta.servlet.http.HttpServletRequest
 import org.springframework.http.HttpStatus
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 import java.util.*
+import fr.backend.backend.security.JwtUtil
 
 
 @RestController
 @RequestMapping("/api/utilisateurs")
 class UtilisateurController(
-    private val utilisateurService: UtilisateurService
+    private val utilisateurService: UtilisateurService,
+    private val jwtUtil: JwtUtil,
 ) {
 
     @PostMapping("/create")
@@ -44,4 +48,27 @@ class UtilisateurController(
     ): UtilisateurDto {
         return utilisateurService.updateUtilisateur(id, utilisateurDto)
     }
+
+    @GetMapping("/getbycompany/{id}")
+    fun getUtilisateursByEntrepris(
+        @PathVariable id: UUID
+    ): List<UtilisateurDto> {
+        return utilisateurService.findByEntrepriseId(id)
+    }
+
+    @GetMapping("/getbycompany")
+    fun getUtilisateursByEntreprise(request: HttpServletRequest): List<UtilisateurDto> {
+        val authHeader = request.getHeader("Authorization")
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            throw RuntimeException("Token manquant ou mal formé")
+        }
+        val token = authHeader.substring(7)
+        val entrepriseIdStr = jwtUtil.extractEntreprise(token) // Méthode que vous aurez ajoutée dans JwtUtil
+        val entrepriseId = UUID.fromString(entrepriseIdStr)
+        return utilisateurService.findByEntrepriseId(entrepriseId)
+    }
+
+
+
+
 }

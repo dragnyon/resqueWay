@@ -1,6 +1,7 @@
 package fr.backend.backend.controller
 
 import fr.backend.backend.dto.EntrepriseDTO
+import fr.backend.backend.request.EntrepriseCreateRequest
 import fr.backend.backend.service.EntrepriseService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -28,7 +29,7 @@ class EntrepriseController(
     }
 
     @PostMapping("/create")
-    fun createEntreprise(@RequestBody entrepriseDTO: EntrepriseDTO): ResponseEntity<EntrepriseDTO> {
+    fun createEntreprise(@RequestBody entrepriseDTO: EntrepriseCreateRequest): ResponseEntity<EntrepriseDTO> {
         val newEntreprise = entrepriseService.createEntreprise(entrepriseDTO)
         return ResponseEntity(newEntreprise, HttpStatus.CREATED)
     }
@@ -36,7 +37,7 @@ class EntrepriseController(
     @PutMapping("update/{id}")
     fun updateEntreprise(
         @PathVariable id: UUID,
-        @RequestBody entrepriseDTO: EntrepriseDTO
+        @RequestBody entrepriseDTO: EntrepriseCreateRequest
     ): ResponseEntity<EntrepriseDTO> {
         val updatedEntreprise = entrepriseService.updateEntreprise(id, entrepriseDTO)
         return ResponseEntity.ok(updatedEntreprise)

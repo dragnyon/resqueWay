@@ -7,6 +7,7 @@ import java.util.*
 
 data class EntrepriseDTO (
     val id: UUID? = null,
+    val name: String,
     val abonnement: UUID? = null,
     val adresse: String,
     val mail: String,

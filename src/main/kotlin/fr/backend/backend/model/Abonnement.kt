@@ -17,28 +17,32 @@ class Abonnement(
     var id: UUID? = null,
 
     @Column(name = "date_debut", nullable = false)
-    val dateDebut: LocalDateTime,
+    var dateDebut: LocalDateTime,
 
     @Column(name = "date_fin", nullable = false)
-    val dateFin: LocalDateTime,
+    var dateFin: LocalDateTime,
 
+    //mensuel ou annuel
     @Column(nullable = false)
-    val periodicite: String,
+    var periodicite: String,
 
+    //défini le nombre d'utilisateurs qui peuvent utiliser l'abonnement
     @Column(name = "nb_utilisateur", nullable = false)
-    val nbUtilisateur: Int,
+    var nbUtilisateur: Int,
 
     @Column(name = "renouvellement_auto", nullable = false)
-    val renouvellementAuto: String,
+    var renouvellementAuto: Boolean,
 
+    //défini le nombre de jours restant avant la fin de l'abonnement
     @Column(name = "nb_jour_restant", nullable = true)
-    val nbJourRestant: Int?,
+    var nbJourRestant: Int,
 
     @Column(nullable = false)
-    val prix: Double,
+    var prix: Double,
 
-    @Column(nullable = false)
-    val status: String // "actif" ou "passif"
+// pour savoir si l'abonnement est encore actif ou on a dépassé la date de fin
+    @Column(name = "est_actif", nullable = false)
+    var estActif: Boolean
 
 ) {
 }

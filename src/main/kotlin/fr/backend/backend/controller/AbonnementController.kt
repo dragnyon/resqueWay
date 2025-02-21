@@ -2,6 +2,7 @@ package fr.backend.backend.controller
 
 import fr.backend.backend.dto.AbonnementDTO
 import fr.backend.backend.dto.HopitalDto
+import fr.backend.backend.request.AbonnementCreateRequest
 import fr.backend.backend.service.AbonnementService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -17,34 +18,34 @@ class AbonnementController(
 
 ) {
 
-    @GetMapping
+    @GetMapping("/all")
     fun getAllAbonnements(): ResponseEntity<List<AbonnementDTO>>  {
         val abonnements = abonnementService.getAllAbonnement()
         return ResponseEntity.ok(abonnements)
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("get/{id}")
     fun getAbonnementById(@PathVariable id: UUID): ResponseEntity<AbonnementDTO> {
         val abonnement = abonnementService.getAbonnementById(id)
         return ResponseEntity.ok(abonnement)
     }
 
-    @PostMapping
-    fun createAbonnement(@RequestBody abonnementDTO: AbonnementDTO): ResponseEntity<AbonnementDTO> {
+    @PostMapping("/create")
+    fun createAbonnement(@RequestBody abonnementDTO: AbonnementCreateRequest): ResponseEntity<AbonnementDTO> {
         val newAbonnement = abonnementService.createAbonnement(abonnementDTO)
         return ResponseEntity(newAbonnement, HttpStatus.CREATED)
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("update/{id}")
     fun updateAbonnement(
         @PathVariable id: UUID,
-        @RequestBody abonnementDTO: AbonnementDTO
+        @RequestBody abonnementDTO: AbonnementCreateRequest
     ): ResponseEntity<AbonnementDTO> {
         val updatedAbonnement = abonnementService.updateAbonnement(id, abonnementDTO)
         return ResponseEntity.ok(updatedAbonnement)
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("delete/{id}")
     fun deleteAbonnement(@PathVariable id: UUID): ResponseEntity<Void> {
         abonnementService.deleteAbonnement(id)
         return ResponseEntity.noContent().build()

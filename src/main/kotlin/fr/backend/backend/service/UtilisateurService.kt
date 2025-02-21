@@ -18,7 +18,6 @@ class UtilisateurService(
     private val utilisateurRepository: UtilisateurRepository,
     private val entrepriseRepository: EntrepriseRepository,
     private val utilisateurMapper: UtilisateurMapper,
-    private val passwordEncoder: PasswordEncoder
 ) {
 
     @Transactional
@@ -63,6 +62,8 @@ class UtilisateurService(
             )
         }
         utilisateur.email = utilisateurDto.email
+        utilisateur.nom = utilisateurDto.nom
+        utilisateur.prenom = utilisateurDto.prenom
         utilisateur.password = utilisateurDto.password
         utilisateur.entreprise = entreprise
         utilisateur.typeUtilisateur = utilisateurDto.typeUtilisateur
@@ -72,6 +73,11 @@ class UtilisateurService(
 
     fun findByEmail(email: String): Utilisateur? {
         return utilisateurRepository.findByEmail(email)
+    }
+
+    fun findByEntrepriseId(entrepriseId: UUID): List<UtilisateurDto> {
+        val utilisateurs = utilisateurRepository.findByEntrepriseId(entrepriseId)
+        return utilisateurMapper.toDtoList(utilisateurs)
     }
 
 }

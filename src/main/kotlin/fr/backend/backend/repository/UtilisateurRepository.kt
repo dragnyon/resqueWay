@@ -8,6 +8,7 @@ import java.util.*
 @Repository
 interface UtilisateurRepository : JpaRepository<Utilisateur, UUID> {
     fun findByEmail(email: String): Utilisateur?
+    fun findByEntrepriseId(entrepriseId: UUID): List<Utilisateur>
 }
 
 

@@ -13,6 +13,8 @@ class UtilisateurMapper {
 
         val utilisateur = Utilisateur(
             email = dto.email,
+            nom = dto.nom,
+            prenom = dto.prenom,
             entreprise = entreprise,
             typeUtilisateur = dto.typeUtilisateur,
 
@@ -26,6 +28,8 @@ class UtilisateurMapper {
         return UtilisateurDto(
             id = utilisateur.id,
             email = utilisateur.email,
+            nom = utilisateur.nom,
+            prenom = utilisateur.prenom,
             password = "",
             entreprise = utilisateur.entreprise?.id,
             typeUtilisateur = utilisateur.typeUtilisateur

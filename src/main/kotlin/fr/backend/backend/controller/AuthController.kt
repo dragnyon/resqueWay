@@ -35,7 +35,7 @@ class AuthController(
             return ResponseEntity.badRequest().body(AuthResponse("Mot de passe incorrect", null))
         }
 
-        val token = jwtUtil.generateToken(utilisateur.email) // ✅ Génère le token JWT
+        val token = jwtUtil.generateToken(utilisateur) // ✅ Génère le token JWT
 
         return ResponseEntity.ok(AuthResponse(token, utilisateur.typeUtilisateur))
     }

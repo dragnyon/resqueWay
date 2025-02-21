@@ -1,11 +1,8 @@
-package fr.backend.backend.dto
+package fr.backend.backend.request
 
 import java.time.LocalDateTime
-import java.util.*
 
-data class AbonnementDTO (
-
-    val id: UUID? = null,
+data class AbonnementCreateRequest(
     val dateDebut: LocalDateTime,
     val dateFin: LocalDateTime,
     val periodicite: String,
@@ -14,5 +11,5 @@ data class AbonnementDTO (
     val nbJourRestant: Int,
     val prix: Double,
     val estActif: Boolean
-
+    
 )

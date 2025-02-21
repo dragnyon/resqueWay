@@ -17,6 +17,12 @@ class Utilisateur(
     @UuidGenerator
     var id: UUID? = null,
 
+    @Column(nullable = false)
+    var nom: String,
+
+    @Column(nullable = false)
+    var prenom: String,
+
     @Column(nullable = false, unique = true)
     var email: String,
 
@@ -27,12 +33,11 @@ class Utilisateur(
     @Column(nullable = false)
     var typeUtilisateur: TypeUtilisateur, // 🔹 Par défaut, utilisateur classique
 
-
-
     @ManyToOne
     @JoinColumn(name = "id_entreprise", nullable = true) // Clé étrangère vers Entreprise
     var entreprise: Entreprise? = null,
-) {
+)
+{
     companion object {
         private val passwordEncoder = BCryptPasswordEncoder()
     }

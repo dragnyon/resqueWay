@@ -2,14 +2,14 @@ package fr.backend.backend.mapper
 
 import fr.backend.backend.dto.AbonnementDTO
 import fr.backend.backend.model.Abonnement
+import fr.backend.backend.request.AbonnementCreateRequest
 import org.springframework.stereotype.Component
 
 @Component
 class AbonnementMapper {
 
-    fun toEntity(dto: AbonnementDTO): Abonnement {
+    fun toEntity(dto: AbonnementCreateRequest): Abonnement {
         return Abonnement(
-            id = dto.id,
             dateDebut = dto.dateDebut,
             dateFin = dto.dateFin,
             periodicite = dto.periodicite,
@@ -17,7 +17,9 @@ class AbonnementMapper {
             renouvellementAuto = dto.renouvellementAuto,
             nbJourRestant = dto.nbJourRestant,
             prix = dto.prix,
-            status = dto.status
+            estActif = dto.estActif,
+
+
         )
     }
 
@@ -31,7 +33,8 @@ class AbonnementMapper {
             renouvellementAuto = entity.renouvellementAuto,
             nbJourRestant = entity.nbJourRestant,
             prix = entity.prix,
-            status = entity.status
+            estActif = entity.estActif,
+
         )
     }
 }

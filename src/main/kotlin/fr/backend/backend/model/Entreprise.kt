@@ -15,6 +15,9 @@ class Entreprise(
     @UuidGenerator
     var id: UUID? = null,
 
+    @Column(name = "name", nullable = false)
+    val name: String,
+
     @OneToOne
     @JoinColumn(name = "id_abonnement") // Clé étrangère vers Abonnement
     val abonnement: Abonnement?,
@@ -27,5 +30,6 @@ class Entreprise(
 
     @Column(name = "password", nullable = false)
     val password: String
+
 ) {
 }

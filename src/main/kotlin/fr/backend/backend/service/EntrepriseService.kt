@@ -4,6 +4,7 @@ import fr.backend.backend.dto.EntrepriseDTO
 import fr.backend.backend.mapper.EntrepriseMapper
 import fr.backend.backend.repository.AbonnementRepository
 import fr.backend.backend.repository.EntrepriseRepository
+import fr.backend.backend.request.EntrepriseCreateRequest
 import org.springframework.stereotype.Service
 import java.util.*
 
@@ -26,18 +27,19 @@ class EntrepriseService(
         return entrepriseMapper.toDTO(entreprise)
     }
 
-    fun createEntreprise(entrepriseDTO: EntrepriseDTO): EntrepriseDTO {
+    fun createEntreprise(entrepriseDTO: EntrepriseCreateRequest): EntrepriseDTO {
         val abonnement = entrepriseDTO.abonnement?.let {
             abonnementRepository.findById(it)
                 .orElseThrow { IllegalArgumentException("Abonnement introuvable") }
         }
         val entreprise = entrepriseMapper.toEntity(entrepriseDTO, abonnement)
+
         val entrepriseSaved = entrepriseRepository.save(entreprise)
         return entrepriseMapper.toDTO(entrepriseSaved)
 
     }
 
-    fun updateEntreprise(id: UUID, entrepriseDTO: EntrepriseDTO): EntrepriseDTO {
+    fun updateEntreprise(id: UUID, entrepriseDTO: EntrepriseCreateRequest): EntrepriseDTO {
         if (!entrepriseRepository.existsById(id)) {
             throw IllegalArgumentException("Entreprise avec ID $id introuvable")
         }
