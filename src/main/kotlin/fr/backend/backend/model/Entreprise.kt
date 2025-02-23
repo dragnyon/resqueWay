@@ -28,8 +28,5 @@ class Entreprise(
     @Column(name = "adresse_mail", nullable = false, unique = true)
     val adresseMail: String,
 
-    @Column(name = "password", nullable = false)
-    val password: String
-
 ) {
 }

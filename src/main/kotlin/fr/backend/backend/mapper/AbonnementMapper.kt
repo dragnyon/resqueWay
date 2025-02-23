@@ -1,3 +1,4 @@
+// src/main/kotlin/fr/backend/backend/mapper/AbonnementMapper.kt
 package fr.backend.backend.mapper
 
 import fr.backend.backend.dto.AbonnementDTO
@@ -8,18 +9,21 @@ import org.springframework.stereotype.Component
 @Component
 class AbonnementMapper {
 
-    fun toEntity(dto: AbonnementCreateRequest): Abonnement {
+    fun toEntity(
+        dto: AbonnementCreateRequest,
+        nbJourRestant: Int,
+        prix: Double,
+        estActif: Boolean
+    ): Abonnement {
         return Abonnement(
             dateDebut = dto.dateDebut,
             dateFin = dto.dateFin,
             periodicite = dto.periodicite,
             nbUtilisateur = dto.nbUtilisateur,
             renouvellementAuto = dto.renouvellementAuto,
-            nbJourRestant = dto.nbJourRestant,
-            prix = dto.prix,
-            estActif = dto.estActif,
-
-
+            nbJourRestant = nbJourRestant,
+            prix = prix,
+            estActif = estActif
         )
     }
 
@@ -33,8 +37,7 @@ class AbonnementMapper {
             renouvellementAuto = entity.renouvellementAuto,
             nbJourRestant = entity.nbJourRestant,
             prix = entity.prix,
-            estActif = entity.estActif,
-
+            estActif = entity.estActif
         )
     }
 }

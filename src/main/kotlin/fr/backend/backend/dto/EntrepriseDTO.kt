@@ -10,8 +10,7 @@ data class EntrepriseDTO (
     val name: String,
     val abonnement: UUID? = null,
     val adresse: String,
-    val mail: String,
-    val password: String
+    val mail: String
 
 
 )

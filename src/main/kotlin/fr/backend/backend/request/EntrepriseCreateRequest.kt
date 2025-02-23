@@ -7,7 +7,6 @@ data class EntrepriseCreateRequest(
     val name: String = "",
     val abonnement: UUID?,
     val adresse: String = "",
-    val mail: String = "",
-    val password: String = "",
+    val mail: String = ""
 )
 

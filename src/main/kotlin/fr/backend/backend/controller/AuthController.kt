@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.ResponseEntity
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.web.bind.annotation.*
+import java.util.UUID
 
 @RestController
 @RequestMapping("/api/auth")
@@ -19,11 +20,12 @@ class AuthController(
 ) {
 
     /**
-     * 1) Endpoint de connexion :
+     * Endpoint de connexion :
      * - Vérifie les identifiants
-     * - Génère le JWT (avec claims : username, entrepriseId, typeUtilisateur)
-     * - Dépose le JWT dans un cookie HttpOnly
-     * - Renvoie juste un message (pas de typeUtilisateur dans le body)
+     * - Si clientType vaut "backoffice" et que l'utilisateur est de type USER,
+     *   efface le cookie (s'il existe) et renvoie une erreur 403.
+     * - Sinon, génère le JWT (avec claims : username, entrepriseId, typeUtilisateur)
+     *   et dépose le JWT dans un cookie HttpOnly.
      */
     @PostMapping("/login")
     fun login(
@@ -33,48 +35,53 @@ class AuthController(
         val utilisateur = utilisateurRepository.findByEmail(authRequest.email)
             ?: return ResponseEntity.badRequest().body("Email incorrect")
 
-        // Vérification du password
         if (!passwordEncoder.matches(authRequest.password, utilisateur.password)) {
             return ResponseEntity.badRequest().body("Mot de passe incorrect")
+        }
+
+        // Vérification du contexte de connexion
+        if (authRequest.clientType == "backoffice" && utilisateur.typeUtilisateur.toString() == "USER") {
+            // Efface le cookie s'il existe en envoyant un cookie vide avec maxAge=0
+            val cookie = Cookie("access_token", "").apply {
+                isHttpOnly = true
+                secure = false  // à "true" en production (HTTPS)
+                path = "/"
+                maxAge = 0   // expire immédiatement
+                setAttribute("SameSite", "None")
+            }
+            response.addCookie(cookie)
+            return ResponseEntity.status(403).body("Accès interdit : utilisateur non autorisé pour le back office")
         }
 
         // Génère le JWT
         val token = jwtUtil.generateToken(utilisateur)
 
-        // Prépare le cookie HttpOnly
+        // Dépose le JWT dans un cookie HttpOnly
         val cookie = Cookie("access_token", token).apply {
             isHttpOnly = true
-            secure = true             // à "true" en prod (HTTPS)
+            secure = true  // à "true" en production (HTTPS)
             path = "/"
-            maxAge = 60 * 60 * 10     // 10h
-            setAttribute("SameSite", "None") // autorise cross-site (si front sur un autre domaine)
+            maxAge = 60 * 60 * 10 // par exemple 10 heures
+            setAttribute("SameSite", "None")
         }
-
-        // Ajoute le cookie à la réponse
         response.addCookie(cookie)
 
-        // On renvoie juste un message simple
         return ResponseEntity.ok("Login successful")
     }
 
     /**
-     * 2) Endpoint pour récupérer les infos utilisateur via le JWT
-     * (déposé dans le cookie 'access_token')
+     * Endpoint pour récupérer les infos utilisateur via le JWT (déposé dans le cookie "access_token")
      */
     @GetMapping("/me")
-    fun getUserInfo(request: HttpServletRequest): ResponseEntity<out Map<String, String?>> {
-        // Récupération du cookie
+    fun getUserInfo(request: HttpServletRequest): ResponseEntity<Map<String, String?>> {
         val tokenCookie = request.cookies?.firstOrNull { it.name == "access_token" }
             ?: return ResponseEntity.status(401).body(mapOf("error" to "No token cookie"))
-
         val token = tokenCookie.value
 
-        // On décode le JWT
-        val username = jwtUtil.extractUsername(token)         // sub
-        val typeUtilisateur = jwtUtil.extractUserType(token)  // claim "typeUtilisateur"
-        val entrepriseId = jwtUtil.extractEntreprise(token)   // claim "entreprise"
+        val username = jwtUtil.extractUsername(token)         // subject
+        val typeUtilisateur = jwtUtil.extractUserType(token)    // claim "typeUtilisateur"
+        val entrepriseId = jwtUtil.extractEntreprise(token)     // claim "entreprise"
 
-        // On renvoie les infos dans un JSON
         val userInfo = mapOf(
             "username" to username,
             "typeUtilisateur" to typeUtilisateur,
@@ -84,8 +91,7 @@ class AuthController(
     }
 
     /**
-     * 3) (Optionnel) Endpoint de logout :
-     * - Remet le cookie vide + maxAge=0 => supprime côté client
+     * Endpoint de logout : expirer le cookie
      */
     @PostMapping("/logout")
     fun logout(response: HttpServletResponse): ResponseEntity<String> {
@@ -97,7 +103,6 @@ class AuthController(
             setAttribute("SameSite", "None")
         }
         response.addCookie(cookie)
-
         return ResponseEntity.ok("Logout successful")
     }
 }

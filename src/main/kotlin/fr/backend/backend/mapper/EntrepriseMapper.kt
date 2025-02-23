@@ -16,8 +16,8 @@ class EntrepriseMapper {
             name = dto.name,
             adresse = dto.adresse,
             adresseMail = dto.mail,
-            abonnement = abo?.let { abo },
-            password = dto.password
+            abonnement = abo?.let { abo }
+
         )
     }
 
@@ -29,8 +29,8 @@ class EntrepriseMapper {
             name = entity.name,
             abonnement = entity.abonnement?.id,
             adresse = entity.adresse,
-            mail = entity.adresseMail,
-            password = ""
+            mail = entity.adresseMail
+
 
         )
     }

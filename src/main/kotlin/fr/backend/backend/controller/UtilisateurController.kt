@@ -1,7 +1,9 @@
 package fr.backend.backend.controller
 
 import fr.backend.backend.dto.UtilisateurDto
+import fr.backend.backend.model.TypeUtilisateur
 import fr.backend.backend.request.UtilisateurCreateRequest
+import fr.backend.backend.security.CustomUserDetails
 import fr.backend.backend.service.UtilisateurService
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.http.HttpStatus
@@ -9,6 +11,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 import java.util.*
 import fr.backend.backend.security.JwtUtil
+import org.springframework.security.access.prepost.PreAuthorize
 
 
 @RestController
@@ -20,8 +23,21 @@ class UtilisateurController(
 
     @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
-    fun createUtilisateur(@RequestBody utilisateurDto: UtilisateurCreateRequest): UtilisateurDto {
-        return utilisateurService.createUtilisateur(utilisateurDto)
+    @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
+    fun createUtilisateur(
+        @RequestBody utilisateurDto: UtilisateurCreateRequest,
+        @AuthenticationPrincipal currentUser: CustomUserDetails
+    ): UtilisateurDto {
+        // Si l'utilisateur connecté est de type ADMIN, forcer entreprise et type
+        val modifiedDto = if (currentUser.typeUtilisateur == "ADMIN" && currentUser.entrepriseId != null) {
+            utilisateurDto.copy(
+                entreprise = currentUser.entrepriseId,
+                typeUtilisateur = TypeUtilisateur.USER
+            )
+        } else {
+            utilisateurDto
+        }
+        return utilisateurService.createUtilisateur(modifiedDto)
     }
 
     @GetMapping("/{id}")
@@ -40,13 +56,23 @@ class UtilisateurController(
         return utilisateurService.deleteUtilisateur(id)
     }
 
-    @PutMapping("update/{id}")
+    @PutMapping("/update/{id}")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
     fun updateUtilisateur(
         @PathVariable id: UUID,
-        @RequestBody utilisateurDto: UtilisateurCreateRequest
+        @RequestBody utilisateurDto: UtilisateurCreateRequest,
+        @AuthenticationPrincipal currentUser: CustomUserDetails
     ): UtilisateurDto {
-        return utilisateurService.updateUtilisateur(id, utilisateurDto)
+        val modifiedDto = if (currentUser.typeUtilisateur == "ADMIN" && currentUser.entrepriseId != null) {
+            utilisateurDto.copy(
+                entreprise = currentUser.entrepriseId,
+                typeUtilisateur = TypeUtilisateur.USER
+            )
+        } else {
+            utilisateurDto
+        }
+        return utilisateurService.updateUtilisateur(id, modifiedDto)
     }
 
     @GetMapping("/getbycompany/{id}")
