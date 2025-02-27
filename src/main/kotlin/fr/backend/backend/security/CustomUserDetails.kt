@@ -9,6 +9,7 @@ data class CustomUserDetails(
     val id: UUID,
     val email: String,
     val entrepriseId: UUID?,
+    val abonnementId: UUID?,
     val typeUtilisateur: String,
     private val password: String,
     private val authorities: Collection<GrantedAuthority>

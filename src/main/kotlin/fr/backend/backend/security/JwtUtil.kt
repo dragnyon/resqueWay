@@ -26,6 +26,13 @@ class JwtUtil {
         }
     }
 
+    // Extrait la claim "abonnement" (ID de l'abonnement en string)
+    fun extractAbonnement(token: String): String? {
+        return extractClaim(token) { claims ->
+            claims["abonnement"] as? String
+        }
+    }
+
     // Extrait la claim "typeUtilisateur"
     fun extractUserType(token: String): String? {
         return extractClaim(token) { claims ->
@@ -50,10 +57,11 @@ class JwtUtil {
     // Génère le token avec l'email (subject), l'id de l'entreprise, le type d'utilisateur, etc.
     fun generateToken(user: Utilisateur): String {
         val entrepriseId = user.entreprise?.id?.toString() ?: ""
-
+        val abonnementId = user.entreprise?.abonnement?.id?.toString() ?: ""
         return Jwts.builder()
             .setSubject(user.email) // subject = email
             .claim("entreprise", entrepriseId)
+            .claim("abonnement", abonnementId)
             .claim("typeUtilisateur", user.typeUtilisateur.toString())
             .setIssuedAt(Date())
             .setExpiration(Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // ex : 10h

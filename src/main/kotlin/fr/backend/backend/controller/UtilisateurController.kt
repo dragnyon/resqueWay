@@ -23,13 +23,11 @@ class UtilisateurController(
 
     @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
-    @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
     fun createUtilisateur(
         @RequestBody utilisateurDto: UtilisateurCreateRequest,
-        @AuthenticationPrincipal currentUser: CustomUserDetails
+        @AuthenticationPrincipal currentUser: CustomUserDetails?
     ): UtilisateurDto {
-        // Si l'utilisateur connecté est de type ADMIN, forcer entreprise et type
-        val modifiedDto = if (currentUser.typeUtilisateur == "ADMIN" && currentUser.entrepriseId != null) {
+        val modifiedDto = if (currentUser != null && currentUser.typeUtilisateur == "ADMIN" && currentUser.entrepriseId != null) {
             utilisateurDto.copy(
                 entreprise = currentUser.entrepriseId,
                 typeUtilisateur = TypeUtilisateur.USER
@@ -39,6 +37,7 @@ class UtilisateurController(
         }
         return utilisateurService.createUtilisateur(modifiedDto)
     }
+
 
     @GetMapping("/{id}")
     fun getUtilisateurById(@PathVariable id: UUID): UtilisateurDto {
@@ -75,12 +74,7 @@ class UtilisateurController(
         return utilisateurService.updateUtilisateur(id, modifiedDto)
     }
 
-    @GetMapping("/getbycompany/{id}")
-    fun getUtilisateursByEntrepris(
-        @PathVariable id: UUID
-    ): List<UtilisateurDto> {
-        return utilisateurService.findByEntrepriseId(id)
-    }
+
 
     @GetMapping("/getbycompany")
     fun getUtilisateursByEntreprise(request: HttpServletRequest): List<UtilisateurDto> {
@@ -98,6 +92,10 @@ class UtilisateurController(
         return utilisateurService.findByEntrepriseId(entrepriseId)
     }
 
+    @GetMapping("/getbycompany/{id}")
+    fun getUtilisateursByEntrepriseId(@PathVariable id: UUID): List<UtilisateurDto> {
+        return utilisateurService.findByEntrepriseId(id)
+    }
 
 
 

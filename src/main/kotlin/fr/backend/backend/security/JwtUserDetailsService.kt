@@ -22,6 +22,7 @@ class JwtUserDetailsService(
             id = utilisateur.id!!,
             email = utilisateur.email,
             entrepriseId = utilisateur.entreprise?.id,
+            abonnementId = utilisateur.entreprise?.abonnement?.id,
             typeUtilisateur = utilisateur.typeUtilisateur.toString(),
             password = utilisateur.password,
             authorities = listOf(authority)
