@@ -5,6 +5,8 @@ import fr.backend.backend.dto.AbonnementDTO
 import fr.backend.backend.model.Abonnement
 import fr.backend.backend.request.AbonnementCreateRequest
 import org.springframework.stereotype.Component
+import java.time.LocalDateTime
+import java.time.temporal.ChronoUnit
 
 @Component
 class AbonnementMapper {
@@ -28,6 +30,11 @@ class AbonnementMapper {
     }
 
     fun toDto(entity: Abonnement): AbonnementDTO {
+
+        val nbJourRestantDynamique = if (LocalDateTime.now().isBefore(entity.dateFin)) {
+            ChronoUnit.DAYS.between(LocalDateTime.now(), entity.dateFin).toInt()
+        } else 0
+
         return AbonnementDTO(
             id = entity.id,
             dateDebut = entity.dateDebut,
@@ -35,7 +42,7 @@ class AbonnementMapper {
             periodicite = entity.periodicite,
             nbUtilisateur = entity.nbUtilisateur,
             renouvellementAuto = entity.renouvellementAuto,
-            nbJourRestant = entity.nbJourRestant,
+            nbJourRestant = nbJourRestantDynamique,
             prix = entity.prix,
             estActif = entity.estActif
         )
