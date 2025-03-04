@@ -39,7 +39,7 @@ class UtilisateurController(
     }
 
 
-    @GetMapping("/{id}")
+    @GetMapping("/get/{id}")
     fun getUtilisateurById(@PathVariable id: UUID): UtilisateurDto {
         return utilisateurService.getUtilisateurById(id)
     }

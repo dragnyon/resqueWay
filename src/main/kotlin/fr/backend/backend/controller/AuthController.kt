@@ -82,6 +82,7 @@ class AuthController(
         val typeUtilisateur = jwtUtil.extractUserType(token)    // claim "typeUtilisateur"
         val entrepriseId = jwtUtil.extractEntreprise(token)     // claim "entreprise"
         val abonnementId = jwtUtil.extractAbonnement(token)     // claim "abonnement"
+        val userId = jwtUtil.extractUserId(token)               // claim "userId"
 
         val userInfo = mapOf(
             "username" to username,

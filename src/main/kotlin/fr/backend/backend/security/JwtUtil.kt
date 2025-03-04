@@ -40,6 +40,13 @@ class JwtUtil {
         }
     }
 
+    // Extrait la claim "userId"
+    fun extractUserId(token: String): String? {
+        return extractClaim(token) { claims ->
+            claims["userId"] as? String
+        }
+    }
+
     // Méthode générique pour extraire un champ du token
     fun <T> extractClaim(token: String, claimsResolver: (Claims) -> T): T {
         val claims = extractAllClaims(token)
@@ -58,8 +65,10 @@ class JwtUtil {
     fun generateToken(user: Utilisateur): String {
         val entrepriseId = user.entreprise?.id?.toString() ?: ""
         val abonnementId = user.entreprise?.abonnement?.id?.toString() ?: ""
+        val userId = user.id?.toString() ?: ""
         return Jwts.builder()
             .setSubject(user.email) // subject = email
+            .claim("userId", userId)
             .claim("entreprise", entrepriseId)
             .claim("abonnement", abonnementId)
             .claim("typeUtilisateur", user.typeUtilisateur.toString())
