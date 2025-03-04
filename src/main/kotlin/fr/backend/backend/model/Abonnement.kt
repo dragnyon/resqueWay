@@ -22,16 +22,9 @@ class Abonnement(
     @Column(name = "date_fin", nullable = false)
     var dateFin: LocalDateTime,
 
-    //mensuel ou annuel
-    @Column(nullable = false)
-    var periodicite: String,
-
     //défini le nombre d'utilisateurs qui peuvent utiliser l'abonnement
     @Column(name = "nb_utilisateur", nullable = false)
     var nbUtilisateur: Int,
-
-    @Column(name = "renouvellement_auto", nullable = false)
-    var renouvellementAuto: Boolean,
 
     //défini le nombre de jours restant avant la fin de l'abonnement
     @Column(name = "nb_jour_restant", nullable = true)

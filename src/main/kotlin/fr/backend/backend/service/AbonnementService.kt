@@ -65,9 +65,7 @@ class AbonnementService(
 
         abonnement.dateDebut = request.dateDebut
         abonnement.dateFin = request.dateFin
-        abonnement.periodicite = request.periodicite
         abonnement.nbUtilisateur = request.nbUtilisateur
-        abonnement.renouvellementAuto = request.renouvellementAuto
         abonnement.nbJourRestant = nbJourRestantCalculated
         abonnement.prix = prixCalculated
         abonnement.estActif = estActifCalculated

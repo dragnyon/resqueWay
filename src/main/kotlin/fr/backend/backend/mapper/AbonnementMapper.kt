@@ -20,9 +20,7 @@ class AbonnementMapper {
         return Abonnement(
             dateDebut = dto.dateDebut,
             dateFin = dto.dateFin,
-            periodicite = dto.periodicite,
             nbUtilisateur = dto.nbUtilisateur,
-            renouvellementAuto = dto.renouvellementAuto,
             nbJourRestant = nbJourRestant,
             prix = prix,
             estActif = estActif
@@ -39,12 +37,11 @@ class AbonnementMapper {
             id = entity.id,
             dateDebut = entity.dateDebut,
             dateFin = entity.dateFin,
-            periodicite = entity.periodicite,
             nbUtilisateur = entity.nbUtilisateur,
-            renouvellementAuto = entity.renouvellementAuto,
             nbJourRestant = nbJourRestantDynamique,
             prix = entity.prix,
-            estActif = entity.estActif
+            estActif = entity.estActif,
+
         )
     }
 }
