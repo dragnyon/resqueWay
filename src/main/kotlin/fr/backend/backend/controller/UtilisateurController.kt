@@ -30,7 +30,7 @@ class UtilisateurController(
         val modifiedDto = if (currentUser != null && currentUser.typeUtilisateur == "ADMIN" && currentUser.entrepriseId != null) {
             utilisateurDto.copy(
                 entreprise = currentUser.entrepriseId,
-                typeUtilisateur = TypeUtilisateur.USER
+
             )
         } else {
             utilisateurDto
@@ -66,7 +66,7 @@ class UtilisateurController(
         val modifiedDto = if (currentUser.typeUtilisateur == "ADMIN" && currentUser.entrepriseId != null) {
             utilisateurDto.copy(
                 entreprise = currentUser.entrepriseId,
-                typeUtilisateur = TypeUtilisateur.USER
+
             )
         } else {
             utilisateurDto

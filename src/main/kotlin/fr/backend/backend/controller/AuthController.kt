@@ -88,7 +88,8 @@ class AuthController(
             "username" to username,
             "typeUtilisateur" to typeUtilisateur,
             "entrepriseId" to entrepriseId,
-            "abonnementId" to abonnementId
+            "abonnementId" to abonnementId,
+            "userId" to userId
         )
         return ResponseEntity.ok(userInfo)
     }
