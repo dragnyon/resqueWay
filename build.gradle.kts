@@ -62,6 +62,12 @@ dependencies {
     // Bean Validation (Hibernate Validator)
     implementation("org.hibernate.validator:hibernate-validator:8.0.0.Final")
 
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("io.micrometer:micrometer-core")
+    implementation("io.micrometer:micrometer-registry-prometheus")
+
+
+
     // Testing dependencies
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
