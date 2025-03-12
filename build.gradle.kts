@@ -73,6 +73,7 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testImplementation("org.springframework.security:spring-security-test")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    testImplementation("org.mockito:mockito-inline:4.0.0")
 }
 
 kotlin {
@@ -82,5 +83,15 @@ kotlin {
 }
 
 tasks.withType<Test> {
+    doFirst {
+        // Recherche du jar de l'agent Byte Buddy dans les dépendances de test
+        val agentJar = configurations.testRuntimeClasspath.get()
+            .find { it.name.contains("byte-buddy-agent") }?.absolutePath
+        if (agentJar != null) {
+            jvmArgs("-javaagent:$agentJar")
+        } else {
+            logger.warn("Agent Byte Buddy non trouvé dans testRuntimeClasspath")
+        }
+    }
     useJUnitPlatform()
 }

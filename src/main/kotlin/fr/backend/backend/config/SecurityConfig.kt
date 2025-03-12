@@ -73,7 +73,7 @@ class SecurityConfig(
         val corsConfig = CorsConfiguration()
 
         // Remplace par l'origine de ton front (domain/port)
-        corsConfig.allowedOrigins = listOf("http://localhost:3000")
+        corsConfig.allowedOrigins = listOf("http://localhost:3000", "null")
         corsConfig.allowedMethods = listOf("GET", "POST", "PUT", "DELETE", "OPTIONS")
         corsConfig.allowedHeaders = listOf("*")
         corsConfig.exposedHeaders = listOf("Authorization")
