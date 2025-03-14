@@ -66,6 +66,10 @@ dependencies {
     implementation("io.micrometer:micrometer-core")
     implementation("io.micrometer:micrometer-registry-prometheus")
 
+    implementation ("org.locationtech.jts:jts-core:1.18.2")
+    implementation ("org.liquibase:liquibase-core:4.23.1")
+    implementation("org.hibernate.orm:hibernate-spatial:6.4.4.Final")
+
 
 
     // Testing dependencies

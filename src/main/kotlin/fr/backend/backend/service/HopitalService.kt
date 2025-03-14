@@ -44,4 +44,10 @@ class HopitalService(
         }
         hopitalRepository.deleteById(id)
     }
+
+    fun getHopitauxAround(latitude: Double, longitude: Double, radiusKm: Double): List<HopitalDto> {
+        val radiusMeters = radiusKm * 1000
+        val hopitaux = hopitalRepository.findHopitauxWithinDistance(latitude, longitude, radiusMeters)
+        return hopitaux.map { hopitalMapper.toDto(it) }
+    }
 }

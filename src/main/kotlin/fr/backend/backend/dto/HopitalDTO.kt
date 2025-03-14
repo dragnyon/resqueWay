@@ -1,5 +1,6 @@
 package fr.backend.backend.dto
 
+import java.awt.Point
 import java.math.BigDecimal
 import java.time.LocalDateTime
 import java.util.*

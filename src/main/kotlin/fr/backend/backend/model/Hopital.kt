@@ -2,7 +2,11 @@ package fr.backend.backend.model
 
 import jakarta.persistence.* // Import JPA pour Jakarta
 import lombok.NoArgsConstructor
+import org.hibernate.annotations.JdbcTypeCode
+import org.hibernate.annotations.Type
 import org.hibernate.annotations.UuidGenerator
+import org.hibernate.type.SqlTypes
+import org.locationtech.jts.geom.Point
 import java.math.BigDecimal
 import java.time.LocalDateTime
 import java.util.*
@@ -26,11 +30,10 @@ data class Hopital(
     @Column(name = "postal_code", nullable = false)
     val postalCode: String,
 
-    @Column(nullable = false)
-    val latitude: BigDecimal,
 
-    @Column(nullable = false)
-    val longitude: BigDecimal,
+
+    @Column(name = "location",columnDefinition = "geography(Point,4326)")
+    var location: Point,
 
     @Column(name = "occupancy_rate", nullable = false)
     val occupancyRate: BigDecimal,

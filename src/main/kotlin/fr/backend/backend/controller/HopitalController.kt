@@ -45,4 +45,15 @@ class HopitalController(
         hopitalService.deleteHopital(id)
         return ResponseEntity.noContent().build()
     }
+
+
+    @GetMapping("/around")
+    fun getHopitauxAround(
+        @RequestParam latitude: Double,
+        @RequestParam longitude: Double,
+        @RequestParam radiusKm: Double
+    ): ResponseEntity<List<HopitalDto>> {
+        val hopitaux = hopitalService.getHopitauxAround(latitude, longitude, radiusKm)
+        return ResponseEntity.ok(hopitaux)
+    }
 }

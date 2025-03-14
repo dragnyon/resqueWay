@@ -51,6 +51,7 @@ class SecurityConfig(
                     "/api/utilisateurs/**",
                     "/api/entreprise/**",
                     "/api/abonnement/**",
+                    "/api/hopitaux/**",
                 ).authenticated()
             }
 
