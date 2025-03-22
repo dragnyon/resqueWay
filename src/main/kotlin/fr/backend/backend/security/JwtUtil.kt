@@ -15,6 +15,7 @@ class JwtUtil {
 
     private val base64Key = "pE7l33v6L7z3LM/Wo8rx2y1jEmCLvB1sP5EiMnQ5Wj0="
 
+
     // Rechargement de la clé à partir de la chaîne encodée
     private val secretKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(base64Key))
 
