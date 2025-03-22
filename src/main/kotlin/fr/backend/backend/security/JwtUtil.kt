@@ -4,6 +4,7 @@ import fr.backend.backend.model.Utilisateur
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
+import io.jsonwebtoken.io.Decoders
 import io.jsonwebtoken.security.Keys
 import org.springframework.stereotype.Component
 import java.security.Key
@@ -12,7 +13,14 @@ import java.util.Date
 @Component
 class JwtUtil {
 
-    private val secretKey: Key = Keys.secretKeyFor(SignatureAlgorithm.HS256)
+    private val base64Key = "pE7l33v6L7z3LM/Wo8rx2y1jEmCLvB1sP5EiMnQ5Wj0="
+
+    // Rechargement de la clé à partir de la chaîne encodée
+    private val secretKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(base64Key))
+
+
+
+    //private val secretKey: Key = Keys.secretKeyFor(SignatureAlgorithm.HS256)
 
     // Extrait le "subject" (ici l'email) du token
     fun extractUsername(token: String): String {
