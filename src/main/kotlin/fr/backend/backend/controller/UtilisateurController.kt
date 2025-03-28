@@ -3,6 +3,7 @@ package fr.backend.backend.controller
 import fr.backend.backend.dto.UtilisateurDto
 import fr.backend.backend.model.TypeUtilisateur
 import fr.backend.backend.request.UtilisateurCreateRequest
+import fr.backend.backend.request.UtilisateurUpdateRequest
 import fr.backend.backend.security.CustomUserDetails
 import fr.backend.backend.service.UtilisateurService
 import jakarta.servlet.http.HttpServletRequest
@@ -60,7 +61,7 @@ class UtilisateurController(
     @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
     fun updateUtilisateur(
         @PathVariable id: UUID,
-        @RequestBody utilisateurDto: UtilisateurCreateRequest,
+        @RequestBody utilisateurDto: UtilisateurUpdateRequest,
         @AuthenticationPrincipal currentUser: CustomUserDetails
     ): UtilisateurDto {
         val modifiedDto = if (currentUser.typeUtilisateur == "ADMIN" && currentUser.entrepriseId != null) {
@@ -74,7 +75,14 @@ class UtilisateurController(
         return utilisateurService.updateUtilisateur(id, modifiedDto)
     }
 
-
+   @PutMapping("/updatePassword/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    fun updatePassword(
+        @PathVariable id: UUID,
+        @RequestBody password: String
+    ): UtilisateurDto {
+        return utilisateurService.updateUtilisateurPassword(id, password)
+    }
 
     @GetMapping("/getbycompany")
     fun getUtilisateursByEntreprise(request: HttpServletRequest): List<UtilisateurDto> {

@@ -7,6 +7,7 @@ import fr.backend.backend.model.Utilisateur
 import fr.backend.backend.repository.EntrepriseRepository
 import fr.backend.backend.repository.UtilisateurRepository
 import fr.backend.backend.request.UtilisateurCreateRequest
+import fr.backend.backend.request.UtilisateurUpdateRequest
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -50,7 +51,7 @@ class UtilisateurService(
 
     fun deleteUtilisateur(id: UUID) = utilisateurRepository.deleteById(id)
 
-    fun updateUtilisateur(id: UUID, utilisateurDto: UtilisateurCreateRequest): UtilisateurDto {
+    fun updateUtilisateur(id: UUID, utilisateurDto: UtilisateurUpdateRequest): UtilisateurDto {
         val entreprise = utilisateurDto.entreprise?.let {
             entrepriseRepository.findById(it)
                 .orElseThrow { IllegalArgumentException("Entreprise introuvable") }
@@ -64,9 +65,20 @@ class UtilisateurService(
         utilisateur.email = utilisateurDto.email
         utilisateur.nom = utilisateurDto.nom
         utilisateur.prenom = utilisateurDto.prenom
-        utilisateur.password = utilisateurDto.password
         utilisateur.entreprise = entreprise
         utilisateur.typeUtilisateur = utilisateurDto.typeUtilisateur
+        val utilisateurSaved = utilisateurRepository.save(utilisateur)
+        return utilisateurMapper.toDto(utilisateurSaved)
+    }
+
+    fun updateUtilisateurPassword(id: UUID, password: String): UtilisateurDto {
+        val utilisateur = utilisateurRepository.findById(id).orElseThrow {
+            throw ResourceNotFoundException(
+                "Utilisateur introuvable",
+                resourceId = id
+            )
+        }
+        utilisateur.password = password
         val utilisateurSaved = utilisateurRepository.save(utilisateur)
         return utilisateurMapper.toDto(utilisateurSaved)
     }
