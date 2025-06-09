@@ -69,6 +69,8 @@ dependencies {
     implementation ("org.locationtech.jts:jts-core:1.18.2")
     implementation ("org.liquibase:liquibase-core:4.23.1")
     implementation("org.hibernate.orm:hibernate-spatial:6.4.4.Final")
+    implementation("io.prometheus:prometheus-metrics-core:1.3.5")
+
 
 
 
